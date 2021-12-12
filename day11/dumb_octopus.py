@@ -35,6 +35,8 @@ def increment_and_propogate(data: list[list[int]]) -> int:
 
 
 diff = {0, 1, -1}
+neighbour_diffs = ((dx, dy) for dx in diff for dy in diff)
+
 
 def propagate(y: int, x: int, data: list[list[int]], bright_pos: set[tuple[int, int]]):
     '''
@@ -42,17 +44,17 @@ def propagate(y: int, x: int, data: list[list[int]], bright_pos: set[tuple[int, 
     If neighbour value becomes > 9, then add neighbours position to store...
     ... and recursively call propagate for neighbour
     '''
-    for dx in diff:
-        for dy in diff:
-            neighbour = data[y + dy][x + dx]
-            if neighbour == -1:
-                pass
-            elif neighbour == 9:
-                data[y + dy][x + dx] += 1
-                bright_pos.add((y + dy, x + dx, ))
-                propagate(y + dy, x + dx, data, bright_pos)
-            else:
-                data[y + dy][x + dx] += 1
+    for dx, dy in neighbour_diffs:
+        neighbour = data[y + dy][x + dx]
+        if neighbour == -1:
+            pass
+        elif neighbour == 9:
+            data[y + dy][x + dx] += 1
+            bright_pos.add((y + dy, x + dx, ))
+            propagate(y + dy, x + dx, data, bright_pos)
+        else:
+            data[y + dy][x + dx] += 1
+
 
 total_flashes = 0
 all_flash_step = 0
